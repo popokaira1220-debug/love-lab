@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>恋愛タイプ診断｜あなたの恋のクセ、10問でわかる</title>
+<meta name="description" content="20代・30代女性のための恋愛タイプ診断。10問であなたの恋のクセと、うまくいく出会い方がわかります。">
+<meta property="og:title" content="恋愛タイプ診断｜あなたの恋のクセ、10問でわかる">
+<meta property="og:description" content="10問・約1分。あなたは6タイプのどれ？">
+<meta property="og:type" content="website">
+<style>
+:root{
+  --bg:#fff7f8;--card:#ffffff;--ink:#3a2a2f;--sub:#8a7076;--accent:#e85d7a;--accent2:#f7c6d0;--line:#f0dde1;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#1f1719;--card:#2a2023;--ink:#f5e9ec;--sub:#bfa5ac;--accent:#ff7d97;--accent2:#5a3540;--line:#3d2d32;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.75}
+.wrap{max-width:560px;margin:0 auto;padding:24px 16px 64px}
+.pr{font-size:12px;color:var(--sub);text-align:center;margin-bottom:8px}
+h1{font-size:26px;text-align:center;margin:8px 0 4px;letter-spacing:.02em}
+.lead{text-align:center;color:var(--sub);margin:0 0 24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 20px;box-shadow:0 4px 18px rgba(232,93,122,.06)}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font-size:16px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;text-align:center;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.progress{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.qno{font-size:13px;color:var(--accent);font-weight:700}
+.q{font-size:18px;font-weight:700;margin:4px 0 18px}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;margin-bottom:10px;font-size:15px;cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.hidden{display:none}
+.type-emoji{font-size:56px;text-align:center}
+.type-name{font-size:22px;font-weight:800;text-align:center;margin:0}
+.type-catch{text-align:center;color:var(--accent);font-weight:700;margin:4px 0 16px}
+h2{font-size:17px;border-left:4px solid var(--accent);padding-left:10px;margin:24px 0 8px}
+ul{padding-left:1.2em;margin:0}
+.app{border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:10px 0}
+.app b{font-size:16px}
+.app p{margin:4px 0 10px;font-size:14px;color:var(--sub)}
+.note{font-size:12px;color:var(--sub)}
+.share{display:flex;gap:8px;margin-top:20px}
+.share a{flex:1;font-size:14px;padding:12px}
+.links{margin-top:28px}
+.links a{display:block;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding:12px 0}
+.links a::after{content:"›";float:right;color:var(--sub)}
+footer{text-align:center;font-size:12px;color:var(--sub);margin-top:40px}
+footer a{color:var(--sub)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="pr">※本サイトはアフィリエイト広告（PR）を含みます</p>
+
+  <!-- スタート -->
+  <section id="start">
+    <h1>恋愛タイプ診断</h1>
+    <p class="lead">10問・約1分。<br>あなたの“恋のクセ”と、うまくいく出会い方がわかる。</p>
+    <div class="card">
+      <p style="margin-top:0">直感で答えてください。考えすぎると、だいたい外れます。</p>
+      <button class="btn" onclick="startQuiz()">診断をはじめる</button>
+    </div>
+    <div class="links">
+      <a href="column/">恋愛コラムを読む</a>
+    </div>
+  </section>
+
+  <!-- 質問 -->
+  <section id="quiz" class="hidden">
+    <div class="progress"><i id="bar"></i></div>
+    <div class="card">
+      <div class="qno" id="qno"></div>
+      <div class="q" id="qtext"></div>
+      <div id="opts"></div>
+    </div>
+  </section>
+
+  <!-- 結果 -->
+  <section id="result" class="hidden">
+    <div class="card">
+      <p style="text-align:center;margin:0;color:var(--sub)">あなたは…</p>
+      <div class="type-emoji" id="rEmoji"></div>
+      <p class="type-name" id="rName"></p>
+      <p class="type-catch" id="rCatch"></p>
+      <p id="rDesc"></p>
+
+      <h2>恋でやりがちなこと</h2>
+      <ul id="rHabit"></ul>
+
+      <h2>うまくいくコツ</h2>
+      <ul id="rTips"></ul>
+
+      <h2>相性がいい相手</h2>
+      <p id="rMatch" style="margin:0"></p>
+
+      <h2>あなたに向いている出会い方</h2>
+      <p id="rMeet" style="margin:0 0 6px"></p>
+      <div id="rApps"></div>
+      <p class="note">※PR｜マッチングアプリは18歳以上（高校生不可）のみ利用できます。</p>
+
+      <h2>気になる人がいるなら、占いで相談</h2>
+      <p id="rUranaiLead" style="margin:0 0 6px"></p>
+      <div id="rUranai"></div>
+      <p class="note">※PR｜占いは娯楽としてお楽しみください。料金・年齢などの利用条件は各公式サイトでご確認ください。</p>
+
+      <div class="share">
+        <a class="btn" id="shareX" target="_blank" rel="noopener">Xでシェア</a>
+        <a class="btn" id="shareLine" target="_blank" rel="noopener" style="background:#06c755">LINEで送る</a>
+      </div>
+      <button class="btn ghost" style="margin-top:10px" onclick="location.href=location.pathname">自分も診断する／もう一度</button>
+    </div>
+    <div class="links">
+      <a id="rColumn" href="column/">このタイプ向けのコラムを読む</a>
+    </div>
+  </section>
+
+  <footer>
+    <a href="column/">コラム</a> ・ <a href="privacy.html">プライバシーポリシー・運営者情報</a><br>
+    © 恋愛タイプ診断
+  </footer>
+</div>
+
+<script>
+/* ===== アフィリエイトリンク（ASPで取得したURLに差し替える） ===== */
+const APPS = {
+  pairs:   {name:"Pairs（ペアーズ）",   note:"会員数が多く、趣味のコミュニティから相手を探せる", url:"#AFF_PAIRS"},
+  with:    {name:"with（ウィズ）",      note:"性格診断をもとに相性のいい相手が見つかる",           url:"#AFF_WITH"},
+  tapple:  {name:"タップル",            note:"「今日ごはん行ける人」など気軽に会いやすい",         url:"#AFF_TAPPLE"},
+  omiai:   {name:"Omiai",               note:"真剣度が高めで落ち着いた出会い向き",                 url:"#AFF_OMIAI"},
+  zexy:    {name:"ゼクシィ縁結び",      note:"結婚を考えた相手探し。お見合い調整の機能あり",       url:"#AFF_ZEXY"},
+};
+
+const URANAI = {
+  vernis:  {name:"電話占いヴェルニ",   note:"電話・チャットで恋愛の悩みを占い師に相談できる", url:"#AFF_VERNIS"},
+  pureri:  {name:"電話占いピュアリ",   note:"恋愛相談が得意な占い師を選んで相談できる",       url:"#AFF_PURERI"},
+  linetalk:{name:"LINEトーク占い",     note:"LINEのチャットで気軽に相談できる",               url:"#AFF_LINETALK"},
+};
+
+/* ===== 6タイプ ===== */
+const TYPES = {
+  tsukusu:{emoji:"🍰",name:"尽くしすぎ献身タイプ",catch:"好きになると、自分を後回しにしがち",
+    desc:"相手の喜ぶ顔が何よりのごほうび。気が利くし、一緒にいて居心地がいいと言われるはず。ただ、頑張りすぎて「都合のいい人」扱いされたり、尽くした分の見返りがなくて急に冷めたりすることも。",
+    habit:["LINEの返信は相手のペースに合わせる","デート代を多めに出してしまう","「重いかな」と思って本音を言えない"],
+    tips:["“してあげたいこと”の前に“してほしいこと”を1つ伝える","尽くすのは付き合ってから。最初はもらう側に回る","自分の予定を先に埋めておく"],
+    match:"ありがとうをちゃんと言える、マメな人",
+    meet:"最初から真剣な人が多い場所の方が、あなたの優しさがちゃんと届きます。",apps:["omiai","with"],uranaiLead:"彼が本当はどう思っているのか。尽くしすぎる前に、一度プロに聞いてみるのもアリです。",uranai:["vernis", "linetalk"],col:"column/tsukusu.html"},
+  guard:{emoji:"🛡️",name:"慎重ガードタイプ",catch:"好きになるまでが長い。でも一度好きになると一途",
+    desc:"人を見る目はしっかり。軽いノリの誘いにはまず乗りません。その慎重さで失敗は少ないけれど、「いい人だけど何考えてるかわからない」と思われて、チャンスを逃していることも。",
+    habit:["3回目のデートまで態度を決めない","褒められても素直に受け取れない","気づいたら相手が他の人と付き合っていた"],
+    tips:["“まだ好きかわからない”を正直に伝えてOK","会う前のメッセージで価値観を確認しておく","1回目は短時間のお茶にしてハードルを下げる"],
+    match:"急かさず待ってくれる、穏やかな人",
+    meet:"会う前にじっくりやりとりできる場所が安心です。",apps:["with","pairs"],uranaiLead:"「この人で大丈夫？」と迷ったら、第三者の目線を借りると決めやすくなります。",uranai:["linetalk", "pureri"],col:"column/guard.html"},
+  hunter:{emoji:"🔥",name:"追いかけハンタータイプ",catch:"手に入りそうで入らない人に、燃える",
+    desc:"好きになったら自分から動ける行動派。恋のスタートダッシュは誰より速いです。ただ、追いかけている間が一番楽しくて、手に入ると急に冷めるパターンにも心当たりがあるはず。",
+    habit:["返信が遅い人ほど気になる","優しすぎる人に物足りなさを感じる","付き合って3か月で冷める"],
+    tips:["“ドキドキ”と“安心”は別物だと覚えておく","冷めかけたら、相手の好きなところを3つ書き出す","刺激はデートの中身でつくる"],
+    match:"自分の世界を持っていて、ほどよく距離感のある人",
+    meet:"出会いの数が多い場所で、たくさん会ってみるのが近道。",apps:["tapple","pairs"],uranaiLead:"追いかけている彼の気持ち、脈はあるのか。ひとりで考え込む前に相談してみて。",uranai:["pureri", "vernis"],col:"column/hunter.html"},
+  jiritsu:{emoji:"🌿",name:"自立マイペースタイプ",catch:"恋も大事。でも自分の時間はもっと大事",
+    desc:"仕事も趣味も充実していて、恋愛に依存しない大人なタイプ。一緒にいてラクと言われます。ただ、ひとりで完結できすぎて、相手が「必要とされてない」と感じて離れていくことも。",
+    habit:["忙しいと連絡を3日放置する","頼るのが苦手で全部自分でやる","「結婚願望ある？」と聞かれて困る"],
+    tips:["小さなお願いを1つしてみる（頼られると人は嬉しい）","会う頻度・連絡頻度は最初にすり合わせる","趣味が合う人を探すと自然に続く"],
+    match:"同じく自立していて、束縛しない人",
+    meet:"趣味や価値観でつながれる場所が向いています。",apps:["pairs","with"],uranaiLead:"忙しくて恋を後回しにしがちなあなたは、出会いのタイミングを占ってもらうのもおすすめ。",uranai:["linetalk", "vernis"],col:"column/jiritsu.html"},
+  romance:{emoji:"🌙",name:"運命待ちロマンチストタイプ",catch:"いつか来る“この人だ”を信じてる",
+    desc:"恋に対してまっすぐで、理想がはっきりしているタイプ。妥協しないのは素敵なこと。ただ、「自然な出会い」にこだわりすぎて、気づけば出会いの数そのものが少なくなっているかも。",
+    habit:["ドラマみたいな出会いを待っている","第一印象でナシ判定しがち","元カレと比べてしまう"],
+    tips:["“運命”は2回目以降に感じることが多いと知る","理想の条件を3つまでに絞る","出会い方はきっかけでしかない、と割り切る"],
+    match:"記念日やサプライズを大事にしてくれる人",
+    meet:"きっかけは何でもOK。真剣な人が多い場所なら、運命もそこにいます。",apps:["zexy","omiai"],uranaiLead:"運命の人はいつ現れる？ ロマンチストなあなたと、占いは相性抜群です。",uranai:["vernis", "pureri"],col:"column/romance.html"},
+  tomodachi:{emoji:"☕",name:"友達からじっくりタイプ",catch:"気づいたら好きになってた、が理想",
+    desc:"恋愛より先に“人として好き”から入るタイプ。長続きしやすく、付き合ってからの安定感は抜群。ただ、仲良くなりすぎて友達のまま終わる、を何度か経験していませんか？",
+    habit:["いい感じの人と“親友”になってしまう","自分から好意を見せるのが恥ずかしい","告白されるまで待ってしまう"],
+    tips:["2人きりで会う回数を意識して増やす","1回だけ“特別扱い”をしてみる","友達に戻れないラインを怖がらない"],
+    match:"会話のテンポが合う、聞き上手な人",
+    meet:"いきなり恋人探しより、会話を重ねられる場所が合っています。",apps:["with","pairs"],uranaiLead:"友達止まりの彼と、恋人になれる可能性は？ 進むか待つか、相談してみて。",uranai:["pureri", "linetalk"],col:"column/tomodachi.html"},
+};
+
+/* ===== 質問（各選択肢がどのタイプに加点するか） ===== */
+const QUESTIONS = [
+  {q:"気になる人からのLINE。返信はどうする？",o:[
+    ["すぐ返す。待たせたくない",{tsukusu:2}],["あえて少し時間をおく",{hunter:2}],["気づいたときに返す",{jiritsu:2}],["何度も書き直してから送る",{guard:1,romance:1}]]},
+  {q:"休日の理想の過ごし方は？",o:[
+    ["恋人の行きたい場所に付き合う",{tsukusu:2}],["ひとりでカフェや趣味",{jiritsu:2}],["友達とワイワイ",{tomodachi:2}],["映画や漫画で恋愛ものに浸る",{romance:2}]]},
+  {q:"「いいな」と思う人の特徴は？",o:[
+    ["ちょっとミステリアス",{hunter:2}],["話していてラク",{tomodachi:2}],["誠実で約束を守る",{guard:2}],["夢や目標がある",{romance:1,jiritsu:1}]]},
+  {q:"初デートで一番気になることは？",o:[
+    ["相手が楽しんでるか",{tsukusu:2}],["この人、信用できるか",{guard:2}],["会話が続くか",{tomodachi:2}],["ときめきがあるか",{romance:1,hunter:1}]]},
+  {q:"恋人とケンカ。どうなりがち？",o:[
+    ["自分が先に謝る",{tsukusu:2}],["黙って距離をおく",{guard:1,jiritsu:1}],["ちゃんと話し合いたい",{tomodachi:2}],["感情的になってしまう",{hunter:1,romance:1}]]},
+  {q:"恋が終わる理由で多いのは？",o:[
+    ["尽くしすぎて疲れる",{tsukusu:2}],["なんとなく冷める",{hunter:2}],["忙しくてすれ違う",{jiritsu:2}],["始まらないまま終わる",{guard:1,tomodachi:1}]]},
+  {q:"友達に恋愛相談されたら？",o:[
+    ["とことん付き合う",{tsukusu:1,tomodachi:1}],["冷静に分析して答える",{guard:2}],["「行っちゃえ！」と背中を押す",{hunter:2}],["一緒に運命を信じる",{romance:2}]]},
+  {q:"告白はどっちから？",o:[
+    ["されたい。理想のシチュエーションで",{romance:2}],["自分から行く",{hunter:2}],["確信が持てるまでしない",{guard:2}],["自然な流れで、いつの間にか",{tomodachi:2}]]},
+  {q:"恋人に一番求めるものは？",o:[
+    ["必要としてくれること",{tsukusu:2}],["お互いの時間の尊重",{jiritsu:2}],["安心感",{guard:1,tomodachi:1}],["ドキドキ",{hunter:1,romance:1}]]},
+  {q:"今のあなたの恋愛に一番近いのは？",o:[
+    ["好きな人はいるけど進展しない",{tomodachi:1,guard:1}],["出会いがない",{romance:2}],["いつも同じパターンで失敗する",{tsukusu:1,hunter:1}],["今は仕事や趣味優先",{jiritsu:2}]]},
+];
+
+let idx=0; const score={};
+Object.keys(TYPES).forEach(k=>score[k]=0);
+const $=id=>document.getElementById(id);
+
+function startQuiz(){ $("start").classList.add("hidden"); $("quiz").classList.remove("hidden"); render(); }
+function render(){
+  const q=QUESTIONS[idx];
+  $("bar").style.width=(idx/QUESTIONS.length*100)+"%";
+  $("qno").textContent=`Q${idx+1} / ${QUESTIONS.length}`;
+  $("qtext").textContent=q.q;
+  $("opts").innerHTML="";
+  q.o.forEach(([label,pts])=>{
+    const b=document.createElement("button"); b.className="opt"; b.textContent=label;
+    b.onclick=()=>{ for(const k in pts) score[k]+=pts[k]; idx++; idx<QUESTIONS.length?render():showResult(); };
+    $("opts").appendChild(b);
+  });
+}
+function showResult(key){
+  if(!key){ /* 同点のときはランダム（先頭タイプに偏らないように） */
+    const max=Math.max(...Object.values(score));
+    const top=Object.keys(score).filter(k=>score[k]===max);
+    key=top[Math.floor(Math.random()*top.length)];
+  }
+  const t=TYPES[key];
+  history.replaceState(null,"","?type="+key);
+  $("quiz").classList.add("hidden"); $("start").classList.add("hidden"); $("result").classList.remove("hidden");
+  $("rEmoji").textContent=t.emoji; $("rName").textContent=t.name; $("rCatch").textContent=t.catch;
+  $("rDesc").textContent=t.desc; $("rMatch").textContent=t.match; $("rMeet").textContent=t.meet;
+  $("rHabit").innerHTML=t.habit.map(s=>`<li>${s}</li>`).join("");
+  $("rTips").innerHTML=t.tips.map(s=>`<li>${s}</li>`).join("");
+  $("rApps").innerHTML=t.apps.map(a=>{const p=APPS[a];return `<div class="app"><b>${p.name}</b><p>${p.note}</p><a class="btn" href="${p.url}" target="_blank" rel="noopener sponsored">公式サイトを見る</a></div>`}).join("");
+  $("rUranaiLead").textContent=t.uranaiLead;
+  $("rUranai").innerHTML=t.uranai.map(a=>{const p=URANAI[a];return `<div class="app"><b>${p.name}</b><p>${p.note}</p><a class="btn" href="${p.url}" target="_blank" rel="noopener sponsored">公式サイトを見る</a></div>`}).join("");
+  $("rColumn").href=t.col;
+  const url=location.origin+location.pathname+"?type="+key;
+  const text=`私は「${t.name}」でした🫣 ${t.catch}\n#恋愛タイプ診断`;
+  $("shareX").href="https://twitter.com/intent/tweet?text="+encodeURIComponent(text)+"&url="+encodeURIComponent(url);
+  $("shareLine").href="https://social-plugins.line.me/lineit/share?url="+encodeURIComponent(url);
+  window.scrollTo(0,0);
+}
+/* シェアURL（?type=xxx）から来た人には結果を直接表示 */
+const shared=new URLSearchParams(location.search).get("type");
+if(shared && TYPES[shared]) showResult(shared);
+</script>
+</body>
+</html>
