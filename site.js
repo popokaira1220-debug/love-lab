@@ -47,7 +47,14 @@
       if (!p || !p.url) { a.style.display = "none"; return; }
       a.href = p.url;
       a.target = "_blank";
-      a.rel = "noopener sponsored";
+      a.rel = "nofollow noopener sponsored";
+      // ASPの表示計測用ピクセル（リンク1つにつき1回だけ）
+      if (p.pixel && !a.getAttribute("data-px")) {
+        var img = new Image(1, 1);
+        img.src = p.pixel; img.alt = ""; img.style.cssText = "position:absolute;width:1px;height:1px;border:0";
+        a.insertAdjacentElement("afterend", img);
+        a.setAttribute("data-px", "1");
+      }
       if (!a.textContent.trim()) a.textContent = p.name + " 公式サイト";
     });
     root.querySelectorAll(".aff-box").forEach(function (box) {
