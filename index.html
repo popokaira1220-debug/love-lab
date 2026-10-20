@@ -42,12 +42,19 @@ ul{padding-left:1.2em;margin:0}
 .note{font-size:12px;color:var(--sub)}
 .share{display:flex;gap:8px;margin-top:20px}
 .share a{flex:1;font-size:14px;padding:12px}
-.links{margin-top:28px}
+.links{margin-top:12px}
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.types div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:13px;line-height:1.5}
+.types b{display:block;font-size:14px;margin:2px 0}
+.types span{font-size:22px}
+.types small{color:var(--sub)}
 .links a{display:block;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding:12px 0}
 .links a::after{content:"›";float:right;color:var(--sub)}
 footer{text-align:center;font-size:12px;color:var(--sub);margin-top:40px}
 footer a{color:var(--sub)}
 </style>
+<script src="config.js"></script>
+<script src="site.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -61,8 +68,17 @@ footer a{color:var(--sub)}
       <p style="margin-top:0">直感で答えてください。考えすぎると、だいたい外れます。</p>
       <button class="btn" onclick="startQuiz()">診断をはじめる</button>
     </div>
+
+    <h2>6つの恋愛タイプ</h2>
+    <div class="types" id="typeGrid"></div>
+    <button class="btn" style="margin-top:14px" onclick="startQuiz()">あなたはどれ？ 診断する</button>
+
+    <h2>よく読まれているコラム</h2>
     <div class="links">
-      <a href="column/">恋愛コラムを読む</a>
+      <a href="column/line-slow.html">彼氏のLINEの返信が遅くて不安…「冷めた？」と思ったときに確認したい4つのこと</a>
+      <a href="column/myakuari.html">脈ありのサインはどれ？男性のLINE・デートでわかる「気になってる」行動7つ</a>
+      <a href="column/kataomoi.html">片思いを諦めるべき？続けるべき？迷ったときに考えたい5つのサイン</a>
+      <a href="column/">コラムをすべて見る</a>
     </div>
   </section>
 
@@ -96,17 +112,21 @@ footer a{color:var(--sub)}
 
       <h2>あなたに向いている出会い方</h2>
       <p id="rMeet" style="margin:0 0 6px"></p>
-      <div id="rApps"></div>
-      <p class="note">※PR｜マッチングアプリは18歳以上（高校生不可）のみ利用できます。</p>
+      <div class="aff-box">
+        <div id="rApps"></div>
+        <p class="note">※PR｜マッチングアプリは18歳以上（高校生不可）のみ利用できます。</p>
+      </div>
 
-      <h2>気になる人がいるなら、占いで相談</h2>
-      <p id="rUranaiLead" style="margin:0 0 6px"></p>
-      <div id="rUranai"></div>
-      <p class="note">※PR｜占いは娯楽としてお楽しみください。料金・年齢などの利用条件は各公式サイトでご確認ください。</p>
+      <div class="aff-box">
+        <h2>気になる人がいるなら、占いで相談</h2>
+        <p id="rUranaiLead" style="margin:0 0 6px"></p>
+        <div id="rUranai"></div>
+        <p class="note">※PR｜占いは娯楽としてお楽しみください。料金・年齢などの利用条件は各公式サイトでご確認ください。</p>
+      </div>
 
       <div class="share">
-        <a class="btn" id="shareX" target="_blank" rel="noopener">Xでシェア</a>
-        <a class="btn" id="shareLine" target="_blank" rel="noopener" style="background:#06c755">LINEで送る</a>
+        <a class="btn" id="shareX" target="_blank" rel="noopener" onclick="track('share',{method:'x'})">Xでシェア</a>
+        <a class="btn" id="shareLine" target="_blank" rel="noopener" style="background:#06c755" onclick="track('share',{method:'line'})">LINEで送る</a>
       </div>
       <button class="btn ghost" style="margin-top:10px" onclick="location.href=location.pathname">自分も診断する／もう一度</button>
     </div>
@@ -122,20 +142,7 @@ footer a{color:var(--sub)}
 </div>
 
 <script>
-/* ===== アフィリエイトリンク（ASPで取得したURLに差し替える） ===== */
-const APPS = {
-  pairs:   {name:"Pairs（ペアーズ）",   note:"会員数が多く、趣味のコミュニティから相手を探せる", url:"#AFF_PAIRS"},
-  with:    {name:"with（ウィズ）",      note:"性格診断をもとに相性のいい相手が見つかる",           url:"#AFF_WITH"},
-  tapple:  {name:"タップル",            note:"「今日ごはん行ける人」など気軽に会いやすい",         url:"#AFF_TAPPLE"},
-  omiai:   {name:"Omiai",               note:"真剣度が高めで落ち着いた出会い向き",                 url:"#AFF_OMIAI"},
-  zexy:    {name:"ゼクシィ縁結び",      note:"結婚を考えた相手探し。お見合い調整の機能あり",       url:"#AFF_ZEXY"},
-};
-
-const URANAI = {
-  vernis:  {name:"電話占いヴェルニ",   note:"電話・チャットで恋愛の悩みを占い師に相談できる", url:"#AFF_VERNIS"},
-  pureri:  {name:"電話占いピュアリ",   note:"恋愛相談が得意な占い師を選んで相談できる",       url:"#AFF_PURERI"},
-  linetalk:{name:"LINEトーク占い",     note:"LINEのチャットで気軽に相談できる",               url:"#AFF_LINETALK"},
-};
+/* サービス名・URLは config.js で管理 */
 
 /* ===== 6タイプ ===== */
 const TYPES = {
@@ -205,7 +212,7 @@ let idx=0; const score={};
 Object.keys(TYPES).forEach(k=>score[k]=0);
 const $=id=>document.getElementById(id);
 
-function startQuiz(){ $("start").classList.add("hidden"); $("quiz").classList.remove("hidden"); render(); }
+function startQuiz(){ track("diag_start"); $("start").classList.add("hidden"); $("quiz").classList.remove("hidden"); render(); }
 function render(){
   const q=QUESTIONS[idx];
   $("bar").style.width=(idx/QUESTIONS.length*100)+"%";
@@ -223,6 +230,7 @@ function showResult(key){
     const max=Math.max(...Object.values(score));
     const top=Object.keys(score).filter(k=>score[k]===max);
     key=top[Math.floor(Math.random()*top.length)];
+    track("diag_complete",{type:key});
   }
   const t=TYPES[key];
   history.replaceState(null,"","?type="+key);
@@ -231,9 +239,10 @@ function showResult(key){
   $("rDesc").textContent=t.desc; $("rMatch").textContent=t.match; $("rMeet").textContent=t.meet;
   $("rHabit").innerHTML=t.habit.map(s=>`<li>${s}</li>`).join("");
   $("rTips").innerHTML=t.tips.map(s=>`<li>${s}</li>`).join("");
-  $("rApps").innerHTML=t.apps.map(a=>{const p=APPS[a];return `<div class="app"><b>${p.name}</b><p>${p.note}</p><a class="btn" href="${p.url}" target="_blank" rel="noopener sponsored">公式サイトを見る</a></div>`}).join("");
+  $("rApps").innerHTML=t.apps.map(a=>affCard(a,"result_app")).join("");
   $("rUranaiLead").textContent=t.uranaiLead;
-  $("rUranai").innerHTML=t.uranai.map(a=>{const p=URANAI[a];return `<div class="app"><b>${p.name}</b><p>${p.note}</p><a class="btn" href="${p.url}" target="_blank" rel="noopener sponsored">公式サイトを見る</a></div>`}).join("");
+  $("rUranai").innerHTML=t.uranai.map(a=>affCard(a,"result_uranai")).join("");
+  applyAff($("result"));
   $("rColumn").href=t.col;
   const url=location.origin+location.pathname+"?type="+key;
   const text=`私は「${t.name}」でした🫣 ${t.catch}\n#恋愛タイプ診断`;
@@ -241,6 +250,9 @@ function showResult(key){
   $("shareLine").href="https://social-plugins.line.me/lineit/share?url="+encodeURIComponent(url);
   window.scrollTo(0,0);
 }
+/* トップの6タイプ一覧 */
+$("typeGrid").innerHTML=Object.values(TYPES).map(t=>`<div><span>${t.emoji}</span><b>${t.name}</b><small>${t.catch}</small></div>`).join("");
+
 /* シェアURL（?type=xxx）から来た人には結果を直接表示 */
 const shared=new URLSearchParams(location.search).get("type");
 if(shared && TYPES[shared]) showResult(shared);
