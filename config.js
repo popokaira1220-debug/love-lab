@@ -14,6 +14,9 @@ window.LOVELAB = {
   // アフィリエイトリンク（ASPで発行されたURLを url に入れる）
   links: {
     // マッチングアプリ
+    ikukuru:  {name: "イククル",          note: "恋活から気軽な出会いまで、目的に合わせて相手を探せる",
+               url: "https://px.a8.net/svt/ejp?a8mat=4BEL1L+GE0M1M+22QA+NUES1",
+               pixel: "https://www12.a8.net/0.gif?a8mat=4BEL1L+GE0M1M+22QA+NUES1"},
     pairs:    {name: "Pairs（ペアーズ）", note: "会員数が多く、趣味のコミュニティから相手を探せる", url: ""},
     with:     {name: "with（ウィズ）",    note: "性格診断をもとに相性のいい相手が見つかる",         url: ""},
     tapple:   {name: "タップル",          note: "「今日ごはん行ける人」など気軽に会いやすい",       url: ""},
